@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnLink</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">LearnLink</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              {% if request.session.admin_name %}
+                  <a class="nav-link" href="{% url 'admin-logout' %}">Logout</a>
+              {% else %}
+                  <a class="nav-link" href="{% url 'register-admin' %}">Login</a>
+              {% endif %}
+          </li>
+          </ul>
+        </div>
+      </nav>
+
+<br>
+<br>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 100px;">
+    <h1>Welcome to LearnLink</h1>
+  <p>
+    The journey of spreading knowledge becomes simpler with LearnLink.
+  </p>
+  <p>
+    With LearnLink you can easily manage your work as a student or as a teacher.
+    A centralized place for resource sharing throughout.
+  </p>
+  </div>
+  
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Quick guidline to LearnLink</h2>
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Adminstration</h5>
+            <p class="card-text">Register yourself as an admin and control the flow of the organisation.</p>
+            <a href="" class="btn btn-primary">Register Here</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Teachers</h5>
+            <p class="card-text">As a teacher you can join the organisation platform created by your adminstration.</p>
+            <a href="" class="btn btn-primary">Register Here</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Student</h5>
+            <p class="card-text">Join your organisation platform now and easily manage assignments and homeworks.</p>
+            <a href="" class="btn btn-primary">Join</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+</body>
+</html>

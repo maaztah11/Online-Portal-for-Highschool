@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Page Header -->
+        <div class="text-center mb-5">
+            <h1>Assignment Management</h1>
+            <p class="lead">Submit assignments and view student uploads</p>
+        </div>
+
+        <!-- Assignment Submission Form -->
+        <div class="card mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Upload a New Assignment</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Assignment Title -->
+                    <div class="mb-3">
+                        <label for="assignmentTitle" class="form-label">Assignment Title</label>
+                        <input type="text" class="form-control" id="assignmentTitle" name='assignment-title' placeholder="Enter assignment title" required>
+                    </div>
+
+                    <!-- Assignment File -->
+                    <div class="mb-3">
+                        <label for="assignmentFile" class="form-label">Upload Assignment File</label>
+                        <input class="form-control" type="file" name="assignment-file" id="assignmentFile" accept=".pdf,.doc,.docx,.zip" required>
+                        <div class="form-text">Accepted formats: PDF, DOC, DOCX, ZIP.</div>
+                    </div>
+
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-upload"></i> Submit Assignment
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Uploaded Assignments Table -->
+        <div class="card mb-5">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="mb-0">Uploaded Assignments</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Assignment Title</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assignment in assignments %}
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>{{ assignment.assignment_title}}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-eye"></i> View</a>
+                                <a href="{% url 'delete-assignment' assignment.id %}" 
+   id="assignment-{{ assignment.id }}" 
+   class="delete-assignment btn btn-danger btn-sm d-inline-flex align-items-center" 
+   data-assignment-id="{{ assignment.id }}">
+    <i class="bi bi-trash"></i> Delete
+</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Students' Uploads Table -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Students' Uploads</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Student Name</th>
+                            <th scope="col">Assignment</th>
+                            <th scope="col">Submission Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example Row -->
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Jane Doe</td>
+                            <td>Introduction to HTML</td>
+                            <td>2024-04-21</td>
+                            <td><span class="badge bg-success">Submitted</span></td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info"><i class="bi bi-download"></i> Download</a>
+                            </td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>
+<script>
+    $(document).on('click', '.delete-assignment', function(event) {
+        event.preventDefault();  // Prevent the default anchor behavior
+        var assignmentId= $(this).data('assginment-id');
+        var csrfToken = '{{ csrf_token }}';
+        console.log("csrfToken "+ csrfToken);
+        var deleteUrl = $(this).attr('href');
+
+        if (confirm('Are you sure you want to delete this task?')) {
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': csrfToken
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Task deleted successfully');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete the task');
+                    }
+                },
+                error: function() {
+                    alert('Error deleting task');
+                }
+            });
+        }
+    });
+</script>
